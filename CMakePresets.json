@@ -1,0 +1,79 @@
+{
+  "version": 5,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "architecture": {
+        "value": "x64"
+      },
+      "hidden": true,
+      "displayName": "Base Config",
+      "description": "Base build using Ninja generator",
+      "generator": "Ninja",
+      "toolchainFile": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake",
+      "binaryDir": "${sourceDir}/build/",
+      "cacheVariables": {
+        "OPENGL_VERSION": {
+          "value": "4.3",
+          "type": "STRING"
+        },
+        "VCPKG_INSTALLED_DIR": {
+          "type": "PATH",
+          "value": "${sourceDir}/cache/vcpkg_installed"
+        }
+      },
+      "environment": {
+        "VCPKG_FORCE_DOWNLOADED_BINARIES": "1",
+        "VIRTUAL_ENV": "${sourceDir}/cache/venv"
+      }
+    },
+    {
+      "hidden": true,
+      "inherits": "base",
+      "name": "windows-base",
+      "displayName": "Windows Config",
+      "description": "Default build using Ninja generator",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang.exe",
+        "CMAKE_CXX_COMPILER": "clang++.exe"
+      }
+    },
+    {
+      "inherits": "windows-base",
+      "name": "windows-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "inherits": "windows-base",
+      "name": "windows-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default",
+      "configurePreset": "base"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "windows-debug-test",
+      "execution": {
+        "jobs": 12
+      },
+      "output": {
+        "outputOnFailure": true
+      },
+      "configurePreset": "windows-debug"
+    }
+  ]
+}

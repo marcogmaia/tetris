@@ -1,0 +1,12 @@
+{
+  "clangd.arguments": [
+    "--compile-commands-dir=${workspaceFolder}/build/windows-debug",
+    "-j=16",
+    "--clang-tidy",
+    "--pch-storage=memory",
+    "--background-index",
+    "--header-insertion=never",
+    "--all-scopes-completion=true",
+    "--enable-config"
+  ],
+}

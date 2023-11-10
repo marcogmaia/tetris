@@ -1,0 +1,22 @@
+{
+  "name": "tetris",
+  "version-string": "0.1.0",
+  "dependencies": [
+    "entt",
+    "fmt",
+    "glad",
+    {
+      "name": "glfw3",
+      "version>=": "3.3.8"
+    },
+    "gtest",
+    {
+      "name": "imgui",
+      "features": ["docking-experimental", "glfw-binding", "opengl3-binding"]
+    },
+    "spdlog",
+    "tl-expected",
+    "tl-optional"
+  ],
+  "builtin-baseline": "f14984af3738e69f197bf0e647a8dca12de92996"
+}
