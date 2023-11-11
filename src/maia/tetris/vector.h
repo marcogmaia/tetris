@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 namespace maia {
 
 template <typename T>
@@ -7,26 +9,35 @@ struct Vector2 {
   T x;
   T y;
 
-  bool operator==(const Vector2<T> &) const = default;
+  bool operator==(const Vector2<T>&) const = default;
 
-  Vector2<T> operator+(const Vector2<T> rhs) const {
+  constexpr Vector2<T> operator+(const Vector2<T> rhs) const {
     return {x + rhs.x, y + rhs.y};
   };
 
-  Vector2<T> operator-() const {
+  constexpr Vector2<T> operator-() const {
     return {-x, -y};
   };
 
-  Vector2<T> operator-(const Vector2<T> rhs) const {
+  constexpr Vector2<T> operator-(const Vector2<T> rhs) const {
     return *this + (-rhs);
   };
 
-  T dot(const Vector2<T> rhs) const {
+  constexpr T dot(const Vector2<T> rhs) const {
     return x * rhs.x + y * rhs.y;
   }
 
-  T cross(const Vector2<T> rhs) const {
+  constexpr T cross(const Vector2<T> rhs) const {
     return x * rhs.y - y * rhs.x;
+  }
+
+  constexpr Vector2<T> Rotate(float angle) {
+    float cos = std::cosf(angle);
+    float sin = std::sinf(angle);
+    return {
+        static_cast<T>(x * cos - y * sin),
+        static_cast<T>(x * sin + y * cos),
+    };
   }
 };
 
