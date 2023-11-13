@@ -31,6 +31,11 @@ class Tetris {
     return current_shape_;
   }
 
+  void Reset() {
+    grid_ = Grid{};
+    NextShape();
+  }
+
  private:
   Shape GetShape() {
     auto shape = maia::Tetrominos::GetRandom();

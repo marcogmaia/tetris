@@ -2,10 +2,10 @@
 
 #pragma once
 
-#include <algorithm>
 #include <vector>
 
 #include <raylib.h>
+#include <tl/optional.hpp>
 
 // #include "maia/tetris/shape.h"
 #include "shape.h"
@@ -26,37 +26,35 @@ struct Block {
 //     x =  |    |
 class Grid {
  public:
-  Block &at(int x, int y) {
-    return grid_[x + kWithd * y];
+  tl::optional<std::reference_wrapper<Block>> at(int x, int y) {
+    if (!IsIndexInGridRange(GetIndex(x, y))) {
+      return {};
+    }
+    return grid_[x + kWidth * y];
   }
 
   const Block &at(int x, int y) const {
-    return grid_[x + kWithd * y];
+    return grid_[x + kWidth * y];
   }
 
   constexpr static int GridWidth() {
-    return kWithd;
+    return kWidth;
   }
 
   constexpr static int GridHeight() {
     return kHeight;
   }
 
-  bool CheckCollision(const Shape &shape) {
-    return std::any_of(shape.positions.cbegin(), shape.positions.cend(), [this](const Position &pos) {
-      if (pos.y >= kHeight) {
-        return false;
-      }
-      return pos.y < 0 || at(lroundf(pos.x), lroundf(pos.y)).filled;
-    });
-  }
+  bool CheckCollision(const Shape &shape);
 
   void FillWith(const Shape &shape) {
     for (const auto &pos : shape.positions) {
-      at(pos.x, pos.y) = Block{
-          .color = shape.color,
-          .filled = true,
-      };
+      if (auto block = at(pos.x, pos.y)) {
+        block->get() = Block{
+            .color = shape.color,
+            .filled = true,
+        };
+      }
     }
   }
 
@@ -69,10 +67,18 @@ class Grid {
   }
 
  private:
-  static constexpr int kWithd = 10;
+  static int GetIndex(int x, int y) {
+    return x + y * kWidth;
+  }
+
+  bool IsIndexInGridRange(int index) {
+    return 0 <= index && index < grid_.size();
+  }
+
+  static constexpr int kWidth = 10;
   static constexpr int kHeight = 20;
   //  This is stored in row major order.
-  std::vector<Block> grid_ = std::vector<Block>(kWithd * kHeight, Block{});
+  std::vector<Block> grid_ = std::vector<Block>(kWidth * kHeight, Block{});
 };
 
 inline void DrawGrid(const Grid &grid) {

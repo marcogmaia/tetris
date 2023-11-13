@@ -1,4 +1,6 @@
-add_executable(tetris "./main.cpp")
+add_executable(tetris)
+
+target_sources(tetris PRIVATE "./main.cpp" "./grid.cpp")
 
 target_link_libraries(
   tetris
