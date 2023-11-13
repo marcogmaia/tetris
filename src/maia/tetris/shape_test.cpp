@@ -23,4 +23,8 @@ TEST(Shape, Rotate) {
   }
 }
 
+TEST(Shape, RotateStraight) {
+  auto shape = Tetrominos::Get(Tetrominos::Tetromino::kStraight);
+}
+
 }  // namespace maia

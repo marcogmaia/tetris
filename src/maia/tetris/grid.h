@@ -13,9 +13,8 @@
 namespace maia {
 
 struct Block {
-  Color color;
-  bool filled;
-  bool frozen;
+  Color color{};
+  bool filled{};
 };
 
 // Order:
@@ -31,13 +30,8 @@ class Grid {
     return grid_[x + kWithd * y];
   }
 
-  void Move(Shape &shape) {
-    Shape current = shape;
-    maia::Move(0, 1, shape);
-    if (!CheckColision(shape)) {
-      return;
-    }
-    FillWith(current);
+  const Block &at(int x, int y) const {
+    return grid_[x + kWithd * y];
   }
 
   constexpr static int GridWidth() {
@@ -48,27 +42,49 @@ class Grid {
     return kHeight;
   }
 
- private:
+  bool CheckCollision(const Shape &shape) {
+    return std::any_of(shape.positions.cbegin(), shape.positions.cend(), [this](const Position &pos) {
+      if (pos.y >= kHeight) {
+        return false;
+      }
+      return pos.y < 0 || at(lroundf(pos.x), lroundf(pos.y)).filled;
+    });
+  }
+
   void FillWith(const Shape &shape) {
     for (const auto &pos : shape.positions) {
       at(pos.x, pos.y) = Block{
           .color = shape.color,
           .filled = true,
-          .frozen = true,
       };
     }
   }
 
-  bool CheckColision(const Shape &shape) {
-    return std::any_of(shape.positions.cbegin(), shape.positions.cend(), [this](const Position &pos) {
-      return pos.y == 0 || at(pos.x, pos.y).filled;
-    });
+  std::vector<Block> &grid() {
+    return grid_;
   }
 
+  const std::vector<Block> &grid() const {
+    return grid_;
+  }
+
+ private:
   static constexpr int kWithd = 10;
   static constexpr int kHeight = 20;
   //  This is stored in row major order.
-  std::vector<Block> grid_;
+  std::vector<Block> grid_ = std::vector<Block>(kWithd * kHeight, Block{});
 };
+
+inline void DrawGrid(const Grid &grid) {
+  for (int x = 0; x < Grid::GridWidth(); ++x) {
+    for (int y = 0; y < Grid::GridHeight(); ++y) {
+      const auto &block = grid.at(x, y);
+      if (block.filled) {
+        constexpr int kSquareSide = 32;
+        DrawRectangle(x * kSquareSide, y * kSquareSide, kSquareSide, kSquareSide, block.color);
+      }
+    }
+  }
+}
 
 }  // namespace maia
