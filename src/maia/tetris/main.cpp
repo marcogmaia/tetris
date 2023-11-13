@@ -1,6 +1,7 @@
 // Copyright (c) Maia
 
 #include <chrono>
+#include <iostream>
 
 #include <imgui.h>
 #include <raylib.h>
@@ -66,19 +67,28 @@ class Clock {
   bool Tick() {
     auto now = std::chrono::steady_clock::now();
     auto delta = std::chrono::steady_clock::now() - next_update_;
-    if (delta.count() * speed_ >= 1.0) {
+    if (delta.count() * speed_ >= 0.0) {
       next_update_ += TickDuration(1.0 / speed_);
       return true;
     }
     return false;
   }
 
+  void Reset() {
+    next_update_ = std::chrono::steady_clock::now() + TickDuration{1};
+  }
+
   void SetSpeed(double speed) {
     speed_ = speed;
+    next_update_ = std::chrono::steady_clock::now() + TickDuration(1.0 / speed_);
+  }
+
+  static float GetClockRate() {
+    return static_cast<float>(TickDuration::period::num) / static_cast<float>(TickDuration::period::den);
   }
 
  private:
-  double speed_ = 1;
+  double speed_ = 0.2;
   std::chrono::time_point<std::chrono::steady_clock, TickDuration> next_update_ = std::chrono::steady_clock::now();
   std::chrono::steady_clock clock_;
 };
@@ -88,10 +98,17 @@ class Clock {
 namespace {
 
 void Update(maia::Clock &clock, maia::Tetris &tetris) {
-  if (IsKeyPressed(KEY_SPACE) || IsKeyDown(KEY_SPACE)) {
+  if (IsKeyReleased(KEY_SPACE)) {
+    clock.SetSpeed(maia::Clock::GetClockRate());
+  }
+  if (IsKeyPressed(KEY_SPACE)) {
     clock.SetSpeed(5);
-  } else {
-    clock.SetSpeed(1);
+    tetris.Tick();
+    return;
+  }
+
+  if (IsKeyPressed(KEY_R)) {
+    tetris.Reset();
   }
 
   if (clock.Tick()) {
