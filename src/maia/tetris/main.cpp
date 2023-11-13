@@ -1,7 +1,6 @@
 // Copyright (c) Maia
 
 #include <chrono>
-#include <iostream>
 
 #include <imgui.h>
 #include <raylib.h>
