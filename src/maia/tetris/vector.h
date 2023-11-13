@@ -9,6 +9,8 @@ struct Vector2 {
   T x;
   T y;
 
+  using Type = T;
+
   bool operator==(const Vector2<T>&) const = default;
 
   constexpr Vector2<T> operator+(const Vector2<T> rhs) const {

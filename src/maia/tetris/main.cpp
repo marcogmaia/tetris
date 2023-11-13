@@ -8,6 +8,7 @@
 
 #include "maia/gui/imgui_extensions.h"
 #include "maia/tetris/grid.h"
+#include "maia/tetris/tetris.h"
 
 namespace maia {
 
@@ -42,22 +43,10 @@ void FillRandomPosition(Color color) {
   FillPosition(x, y, color);
 }
 
-void FillRandomMove(Color color, Position &pos) {
-  pos.x = std::clamp(pos.x + GetRandomValue(-1, 1), 0, Grid::GridWidth() - 1);
-  pos.y = std::clamp(pos.y + GetRandomValue(-1, 1), 0, Grid::GridHeight() - 1);
-  FillPosition(pos.x, pos.y, color);
-}
-
 void DrawShape(const Shape &shape) {
   for (const auto &pos : shape.positions) {
     DrawRectangle(pos.x * kSquaseSide, pos.y * kSquaseSide, kSquaseSide, kSquaseSide, shape.color);
   }
-}
-
-Shape GetShape() {
-  auto shape = maia::Tetrominos::GetRandom();
-  maia::SetPosition(2, 20, shape);
-  return shape;
 }
 
 void DrawAllShapes() {
@@ -98,7 +87,7 @@ class Clock {
 
 namespace {
 
-void Update(maia::Clock &clock, maia::Shape &shape) {
+void Update(maia::Clock &clock, maia::Tetris &tetris) {
   if (IsKeyPressed(KEY_SPACE) || IsKeyDown(KEY_SPACE)) {
     clock.SetSpeed(5);
   } else {
@@ -106,7 +95,7 @@ void Update(maia::Clock &clock, maia::Shape &shape) {
   }
 
   if (clock.Tick()) {
-    maia::Move(0, 1, shape);
+    tetris.Tick();
   }
 }
 
@@ -122,26 +111,20 @@ int main() {
 
   RenderTexture render_tex = LoadRenderTexture(kWindowWidth, kWindowHeight);
 
-  maia::Position pos0{};
-  maia::Position pos1{};
-  auto shape = maia::GetShape();
-
+  // auto shape = maia::GetShape();
   maia::Clock clock{};
+  maia::Tetris tetris{};
 
   while (!WindowShouldClose()) {
-    Update(clock, shape);
+    Update(clock, tetris);
 
-    if (shape.positions[0].y < -1) {
-      shape = maia::GetShape();
-    }
-
+    // Draw tetris in another texture.
     BeginTextureMode(render_tex);
     {
       ClearBackground(BLANK);
-      maia::FillRandomMove(GREEN, pos0);
-      maia::FillRandomMove(BLUE, pos1);
-      maia::DrawShape(shape);
+      maia::DrawShape(tetris.CurrentShape());
       maia::DrawGrid();
+      maia::DrawGrid(tetris.grid());
       maia::DrawAllShapes();
     }
     EndTextureMode();
@@ -149,7 +132,6 @@ int main() {
     BeginDrawing();
     {
       ClearBackground(BLANK);
-      // Draw the gray texture.
       DrawTexture(render_tex.texture, 0, 0, WHITE);
       rlDrawRenderBatchActive();
 
