@@ -107,7 +107,6 @@ void Update(maia::Clock &clock, maia::Tetris &tetris) {
   }
 
   if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT)) {
-    // TODO(marco): Check if can move before moving.
     tetris.Move(-1, 0);
   }
 
