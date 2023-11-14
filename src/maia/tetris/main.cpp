@@ -2,11 +2,9 @@
 
 #include <chrono>
 
-#include <imgui.h>
 #include <raylib.h>
 #include <rlgl.h>
 
-#include "maia/gui/imgui_extensions.h"
 #include "maia/tetris/grid.h"
 #include "maia/tetris/tetris.h"
 
@@ -31,16 +29,6 @@ void DrawGrid() {
     auto x = v * kSquaseSide;
     DrawLine(x, 0, x, kY, WHITE);
   }
-}
-
-void FillPosition(int x, int y, Color color = GREEN) {
-  DrawRectangle(x * kSquaseSide, y * kSquaseSide, kSquaseSide, kSquaseSide, color);
-}
-
-void FillRandomPosition(Color color) {
-  auto x = GetRandomValue(0, maia::Grid::GridWidth() - 1);
-  auto y = GetRandomValue(0, maia::Grid::GridHeight() - 1);
-  FillPosition(x, y, color);
 }
 
 void DrawTetromino(const Tetromino &tetromino) {
@@ -125,7 +113,6 @@ int main() {
 
   SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE);
   InitWindow(kWindowWidth, kWindowHeight, "Tetris");
-  gui::ImGuiInit();
 
   RenderTexture render_tex = LoadRenderTexture(kWindowWidth, kWindowHeight);
 
@@ -150,11 +137,6 @@ int main() {
       ClearBackground(BLANK);
       DrawTexture(render_tex.texture, 0, 0, WHITE);
       rlDrawRenderBatchActive();
-
-      // ImGui stuff goes below.
-      gui::ImGuiBeginFrame();
-      // ImGui::ShowDemoWindow();
-      gui::ImGuiEndFrame();
     }
     EndDrawing();
   }
