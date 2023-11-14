@@ -36,11 +36,11 @@ struct Tetrominos {
   // https://www.wikiwand.com/en/Tetromino
   // clang-format off
   static constexpr std::array<Shape, 5> kTetrominos{
-      Shape{  .color{BLUE}, .positions{Position{0, 0}, Position{1, 0}, Position{2, 0}, Position{3, 0}}, .center{1.5, -0.5}},
-      Shape{.color{YELLOW}, .positions{Position{0, 0}, Position{0, 1}, Position{1, 0}, Position{1, 1}}, .center{}},
-      Shape{  .color{PINK}, .positions{Position{0, 1}, Position{1, 1}, Position{2, 1}, Position{1, 0}}, .center{}},
-      Shape{.color{ORANGE}, .positions{Position{0, 0}, Position{0, 1}, Position{0, 2}, Position{1, 0}}, .center{}},
-      Shape{ .color{GREEN}, .positions{Position{0, 0}, Position{1, 0}, Position{1, 1}, Position{2, 1}}, .center{}},
+      Shape{  .color{BLUE}, .positions{{{0, 0}, {1, 0}, {2, 0}, {3, 0}}}, .center{1.5, -0.5}}, // KStraight
+      Shape{.color{YELLOW}, .positions{{{0, 0}, {0, 1}, {1, 0}, {1, 1}}}, .center{0.5,  0.5}}, // kSquare
+      Shape{  .color{PINK}, .positions{{{0, 1}, {1, 1}, {2, 1}, {1, 0}}}, .center{1.0,  1.0}}, // kT
+      Shape{.color{ORANGE}, .positions{{{0, 0}, {0, 1}, {0, 2}, {1, 0}}}, .center{0.0,  0.0}}, // kL
+      Shape{ .color{GREEN}, .positions{{{0, 0}, {1, 0}, {1, 1}, {2, 1}}}, .center{1.0,  1.0}}, // kSkew
   };
   // clang-format on
 

@@ -106,7 +106,21 @@ void Update(maia::Clock &clock, maia::Tetris &tetris) {
     return;
   }
 
+  if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT)) {
+    // TODO(marco): Check if can move before moving.
+    maia::Move(-1, 0, tetris.CurrentShape());
+  }
+
+  if (IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT)) {
+    maia::Move(1, 0, tetris.CurrentShape());
+  }
+
   if (IsKeyPressed(KEY_R)) {
+    tetris.CurrentShape() = maia::RotateShapeLeft(tetris.CurrentShape());
+  }
+
+  // FIXME(marco): when reset everything is bugged.
+  if (IsKeyPressed(KEY_N)) {
     tetris.Reset();
   }
 
@@ -141,7 +155,6 @@ int main() {
       maia::DrawShape(tetris.CurrentShape());
       maia::DrawGrid();
       maia::DrawGrid(tetris.grid());
-      maia::DrawAllShapes();
     }
     EndTextureMode();
 
