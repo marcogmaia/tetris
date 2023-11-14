@@ -83,23 +83,12 @@ void Update(maia::Clock &clock, maia::Tetris &tetris) {
     tetris.Tick();
     return;
   }
-
-  if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT)) {
-    tetris.Move(-1, 0);
-  }
-
-  if (IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT)) {
-    tetris.Move(1, 0);
-  }
-
-  if (IsKeyPressed(KEY_R)) {
-    tetris.RotateLeft();
-  }
-
-  if (IsKeyPressed(KEY_N)) {
-    tetris.Reset();
-  }
-
+  // clang-format off
+  if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT))  { tetris.Move(-1, 0); }
+  if (IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT)) { tetris.Move(1, 0); }
+  if (IsKeyPressed(KEY_R))                            { tetris.RotateLeft(); }
+  if (IsKeyPressed(KEY_N))                            { tetris.Reset(); }
+  // clang-format on
   if (clock.Tick()) {
     tetris.Tick();
   }
