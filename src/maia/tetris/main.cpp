@@ -119,7 +119,6 @@ void Update(maia::Clock &clock, maia::Tetris &tetris) {
     tetris.CurrentShape() = maia::RotateShapeLeft(tetris.CurrentShape());
   }
 
-  // FIXME(marco): when reset everything is bugged.
   if (IsKeyPressed(KEY_N)) {
     tetris.Reset();
   }

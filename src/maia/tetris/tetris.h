@@ -16,11 +16,6 @@ class Tetris {
   Tetris() {
     current_shape_ = GetShape();
     next_shape_ = GetShape();
-
-    rows_.reserve(Grid::GridHeight());
-    for (int row = 0; row < Grid::GridHeight(); ++row) {
-      rows_.emplace_back(GetGridRow(row));
-    }
   }
 
   void Tick() {
@@ -62,21 +57,20 @@ class Tetris {
       return std::all_of(row.begin(), row.end(), [](const Block& block) { return block.filled; });
     };
 
-    auto rows = rows_;
+    auto rows = grid_.rows();
     std::stable_sort(rows.begin(), rows.end(), [is_filled](std::span<Block> lhs, std::span<Block> rhs) {
       return !is_filled(lhs) && is_filled(rhs);
     });
 
-    std::vector<Block> new_grid;
-    new_grid.reserve(grid_.grid().size());
-    for (auto& row : rows) {
+    Grid new_grid{};
+    for (int i = 0; auto& row : rows) {
       if (is_filled(row)) {
         std::fill(row.begin(), row.end(), Block{});
       }
-      std::copy(row.begin(), row.end(), std::back_inserter(new_grid));
+      std::copy(row.begin(), row.end(), new_grid.rows()[i].begin());
+      ++i;
     }
-
-    std::copy(new_grid.begin(), new_grid.end(), grid_.grid().begin());
+    grid_ = std::move(new_grid);
   }
 
   void NextShape() {
@@ -93,8 +87,6 @@ class Tetris {
   Grid grid_{};
   Shape current_shape_;
   Shape next_shape_;
-
-  std::vector<std::span<Block>> rows_;
 };
 
 }  // namespace maia
