@@ -1,6 +1,6 @@
 // Copyright (c) Maia
 
-#include "maia/tetris/shape.h"
+#include "maia/tetris/tetromino.h"
 
 #include <vector>
 
@@ -8,7 +8,7 @@
 
 namespace maia {
 
-TEST(Shape, Rotate) {
+TEST(Tetromino, Rotate) {
   std::vector<Position> expecteds{
       { 0,  1},
       {-1,  0},
@@ -22,8 +22,8 @@ TEST(Shape, Rotate) {
   }
 }
 
-TEST(Shape, RotateStraight) {
-  auto shape = Tetrominos::Get(Tetrominos::Tetromino::kStraight);
+TEST(Tetromino, RotateStraight) {
+  auto shape = Tetrominos::Get(Tetrominos::Format::kStraight);
   auto rotated_shape = RotateShapeLeft(shape);
   auto expected_positions = std::vector<Position>{
       {1, -2},

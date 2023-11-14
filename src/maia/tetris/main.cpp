@@ -43,7 +43,7 @@ void FillRandomPosition(Color color) {
   FillPosition(x, y, color);
 }
 
-void DrawShape(const Shape &shape) {
+void DrawShape(const Tetromino &shape) {
   for (const auto &pos : shape.positions) {
     DrawRectangle(pos.x * kSquaseSide, pos.y * kSquaseSide, kSquaseSide, kSquaseSide, shape.color);
   }
@@ -53,7 +53,7 @@ void DrawAllShapes() {
   Position pos{};
   for (const auto &tetromino : Tetrominos::kTetrominos) {
     pos = pos + Position{5, 3};
-    Shape shape = tetromino;
+    Tetromino shape = tetromino;
     SetPosition(pos.x, pos.y, shape);
     DrawShape(shape);
   }

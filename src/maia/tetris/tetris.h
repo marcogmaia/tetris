@@ -7,7 +7,7 @@
 #include <span>
 
 #include "maia/tetris/grid.h"
-#include "maia/tetris/shape.h"
+#include "maia/tetris/tetromino.h"
 
 namespace maia {
 
@@ -32,11 +32,11 @@ class Tetris {
     return grid_;
   }
 
-  Shape& CurrentShape() {
+  Tetromino& CurrentShape() {
     return current_shape_;
   }
 
-  const Shape& CurrentShape() const {
+  const Tetromino& CurrentShape() const {
     return current_shape_;
   }
 
@@ -52,7 +52,7 @@ class Tetris {
   }
 
  private:
-  bool CanMove(const Shape& shape) {
+  bool CanMove(const Tetromino& shape) {
     auto can_move = [this](Position pos) {
       const auto x = std::lroundf(pos.x);
       const auto y = std::lroundf(pos.y);
@@ -65,7 +65,7 @@ class Tetris {
     return std::all_of(shape.positions.begin(), shape.positions.end(), can_move);
   }
 
-  static Shape GetShape() {
+  static Tetromino GetShape() {
     auto shape = maia::Tetrominos::GetRandom();
     maia::SetPosition(2, 20, shape);
     return shape;
@@ -104,8 +104,8 @@ class Tetris {
   }
 
   Grid grid_{};
-  Shape current_shape_;
-  Shape next_shape_;
+  Tetromino current_shape_;
+  Tetromino next_shape_;
 };
 
 }  // namespace maia

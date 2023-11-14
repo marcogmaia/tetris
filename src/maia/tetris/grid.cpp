@@ -5,7 +5,7 @@
 
 namespace maia {
 
-bool Grid::CheckCollision(const Shape &shape) {
+bool Grid::CheckCollision(const Tetromino &shape) {
   return std::any_of(shape.positions.cbegin(), shape.positions.cend(), [this](const Position &pos) {
     int x = std::lroundf(pos.x);
     int y = std::lroundf(pos.y);

@@ -8,8 +8,7 @@
 #include <raylib.h>
 #include <tl/optional.hpp>
 
-// #include "maia/tetris/shape.h"
-#include "shape.h"
+#include "maia/tetris/tetromino.h"
 
 namespace maia {
 
@@ -46,9 +45,9 @@ class Grid {
     return kHeight;
   }
 
-  bool CheckCollision(const Shape &shape);
+  bool CheckCollision(const Tetromino &shape);
 
-  void FillWith(const Shape &shape) {
+  void FillWith(const Tetromino &shape) {
     for (const auto &pos : shape.positions) {
       if (auto block = at(std::lroundf(pos.x), std::lroundf(pos.y))) {
         block->get() = Block{
