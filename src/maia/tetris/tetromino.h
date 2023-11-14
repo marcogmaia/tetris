@@ -16,10 +16,10 @@ using Position = Vector2<float>;
 
 struct Tetromino {
   Color color;
-  // Occupied positions by the shape.
+  // Occupied positions by the tetromino.
   std::array<Position, 4> positions;
   Position center;
-  // Check if the shape can be moved.
+  // Check if the tetromino can be moved.
   bool can_move = true;
 
   Tetromino &Move(Position::Type dx, Position::Type dy) {
@@ -66,8 +66,8 @@ struct Tetrominos {
   }
 };
 
-inline Position GetCenter(const Tetromino &shape) {
-  const auto &positions = shape.positions;
+inline Position GetCenter(const Tetromino &tetromino) {
+  const auto &positions = tetromino.positions;
   const auto [xmin, xmax] = std::minmax_element(
       positions.begin(), positions.end(), [](const Position &pos0, const Position &pos1) { return pos0.x < pos1.x; });
   const auto [ymin, ymax] = std::minmax_element(
@@ -78,19 +78,19 @@ inline Position GetCenter(const Tetromino &shape) {
   };
 }
 
-inline Tetromino Move(Tetromino shape, Position::Type dx, Position::Type dy) {
-  for (auto &pos : shape.positions) {
+inline Tetromino Move(Tetromino tetromino, Position::Type dx, Position::Type dy) {
+  for (auto &pos : tetromino.positions) {
     pos += {dx, dy};
   }
-  shape.center = shape.center + Position{dx, dy};
-  return shape;
+  tetromino.center = tetromino.center + Position{dx, dy};
+  return tetromino;
 }
 
-inline void SetPosition(float x, float y, Tetromino &shape) {
-  for (auto &pos : shape.positions) {
+inline void SetPosition(float x, float y, Tetromino &tetromino) {
+  for (auto &pos : tetromino.positions) {
     pos = pos + Position{x, y};
   }
-  shape.center = shape.center + Position{x, y};
+  tetromino.center = tetromino.center + Position{x, y};
 }
 
 inline constexpr Position Rotate(Position pos, float angle, Position center = {0, 0}) {
@@ -107,20 +107,20 @@ inline Position RotateRight(Position pos, Position center = {0, 0}) {
   return Rotate(pos, -90, center);
 }
 
-inline Tetromino RotateShape(const Tetromino &shape, float angle) {
-  Tetromino out = shape;
+inline Tetromino Rotatetetromino(const Tetromino &tetromino, float angle) {
+  Tetromino out = tetromino;
   for (auto &position : out.positions) {
-    position = Rotate(position, angle, shape.center);
+    position = Rotate(position, angle, tetromino.center);
   }
   return out;
 }
 
-inline Tetromino RotateShapeLeft(const Tetromino &shape) {
-  return RotateShape(shape, 90);
+inline Tetromino RotatetetrominoLeft(const Tetromino &tetromino) {
+  return Rotatetetromino(tetromino, 90);
 }
 
-inline Tetromino RotateShapeRight(const Tetromino &shape) {
-  return RotateShape(shape, -90);
+inline Tetromino RotatetetrominoRight(const Tetromino &tetromino) {
+  return Rotatetetromino(tetromino, -90);
 }
 
 }  // namespace maia

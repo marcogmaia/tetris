@@ -45,13 +45,13 @@ class Grid {
     return kHeight;
   }
 
-  bool CheckCollision(const Tetromino &shape);
+  bool CheckCollision(const Tetromino &tetromino);
 
-  void FillWith(const Tetromino &shape) {
-    for (const auto &pos : shape.positions) {
+  void FillWith(const Tetromino &tetromino) {
+    for (const auto &pos : tetromino.positions) {
       if (auto block = at(std::lroundf(pos.x), std::lroundf(pos.y))) {
         block->get() = Block{
-            .color = shape.color,
+            .color = tetromino.color,
             .filled = true,
         };
       }

@@ -14,16 +14,16 @@ namespace maia {
 class Tetris {
  public:
   Tetris() {
-    current_shape_ = GetShape();
-    next_shape_ = GetShape();
+    current_tetromino_ = GetTetromino();
+    next_tetromino_ = GetTetromino();
   }
 
   void Tick() {
-    auto prev = current_shape_;
-    current_shape_.Move(0, -1);
-    if (grid_.CheckCollision(current_shape_)) {
+    auto prev = current_tetromino_;
+    current_tetromino_.Move(0, -1);
+    if (grid_.CheckCollision(current_tetromino_)) {
       grid_.FillWith(prev);
-      NextShape();
+      Nexttetromino();
       RemoveFilledRows();
     }
   }
@@ -32,33 +32,33 @@ class Tetris {
     return grid_;
   }
 
-  Tetromino& CurrentShape() {
-    return current_shape_;
+  Tetromino& CurrentTetromino() {
+    return current_tetromino_;
   }
 
-  const Tetromino& CurrentShape() const {
-    return current_shape_;
+  const Tetromino& Currenttetromino() const {
+    return current_tetromino_;
   }
 
   void Reset() {
     grid_ = Grid{};
-    NextShape();
+    Nexttetromino();
   }
 
   void Move(int x, int y) {
-    if (auto next_pos = ::maia::Move(current_shape_, x, y); CanMove(next_pos)) {
-      current_shape_ = next_pos;
+    if (auto next_pos = ::maia::Move(current_tetromino_, x, y); CanMove(next_pos)) {
+      current_tetromino_ = next_pos;
     }
   }
 
   void RotateLeft() {
-    if (auto next_rotation = RotateShapeLeft(current_shape_); CanMove(next_rotation)) {
-      current_shape_ = next_rotation;
+    if (auto next_rotation = RotatetetrominoLeft(current_tetromino_); CanMove(next_rotation)) {
+      current_tetromino_ = next_rotation;
     }
   }
 
  private:
-  bool CanMove(const Tetromino& shape) {
+  bool CanMove(const Tetromino& tetromino) {
     auto can_move = [this](Position pos) {
       const auto x = std::lroundf(pos.x);
       const auto y = std::lroundf(pos.y);
@@ -71,13 +71,13 @@ class Tetris {
       }
       return !block->get().filled;
     };
-    return std::all_of(shape.positions.begin(), shape.positions.end(), can_move);
+    return std::all_of(tetromino.positions.begin(), tetromino.positions.end(), can_move);
   }
 
-  static Tetromino GetShape() {
-    auto shape = maia::Tetrominos::GetRandom();
-    maia::SetPosition(2, 20, shape);
-    return shape;
+  static Tetromino GetTetromino() {
+    auto tetromino = maia::Tetrominos::GetRandom();
+    maia::SetPosition(2, 20, tetromino);
+    return tetromino;
   }
 
   void RemoveFilledRows() {
@@ -101,9 +101,9 @@ class Tetris {
     grid_ = std::move(new_grid);
   }
 
-  void NextShape() {
-    current_shape_ = next_shape_;
-    next_shape_ = GetShape();
+  void Nexttetromino() {
+    current_tetromino_ = next_tetromino_;
+    next_tetromino_ = GetTetromino();
   }
 
   std::span<Block> GetGridRow(int index) {
@@ -113,8 +113,8 @@ class Tetris {
   }
 
   Grid grid_{};
-  Tetromino current_shape_;
-  Tetromino next_shape_;
+  Tetromino current_tetromino_;
+  Tetromino next_tetromino_;
 };
 
 }  // namespace maia
