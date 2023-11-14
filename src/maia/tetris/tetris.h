@@ -51,12 +51,21 @@ class Tetris {
     }
   }
 
+  void RotateLeft() {
+    if (auto next_rotation = RotateShapeLeft(current_shape_); CanMove(next_rotation)) {
+      current_shape_ = next_rotation;
+    }
+  }
+
  private:
   bool CanMove(const Tetromino& shape) {
     auto can_move = [this](Position pos) {
       const auto x = std::lroundf(pos.x);
       const auto y = std::lroundf(pos.y);
       const auto block = grid_.at(x, y);
+      if (x < 0.0 || x >= Grid::GridWidth()) {
+        return false;
+      }
       if (!block) {
         return true;
       }

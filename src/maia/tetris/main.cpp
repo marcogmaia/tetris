@@ -115,7 +115,7 @@ void Update(maia::Clock &clock, maia::Tetris &tetris) {
   }
 
   if (IsKeyPressed(KEY_R)) {
-    tetris.CurrentShape() = maia::RotateShapeLeft(tetris.CurrentShape());
+    tetris.RotateLeft();
   }
 
   if (IsKeyPressed(KEY_N)) {
