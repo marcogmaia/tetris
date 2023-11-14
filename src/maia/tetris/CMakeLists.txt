@@ -9,7 +9,7 @@ target_link_libraries(
           imgui::imgui
 )
 
-add_executable(tetris_test "./shape_test.cpp")
+add_executable(tetris_test "./tetromino_test.cpp")
 
 target_link_libraries(
   tetris_test

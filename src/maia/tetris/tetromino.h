@@ -14,7 +14,7 @@ namespace maia {
 
 using Position = Vector2<float>;
 
-struct Shape {
+struct Tetromino {
   Color color;
   // Occupied positions by the shape.
   std::array<Position, 4> positions;
@@ -22,7 +22,7 @@ struct Shape {
   // Check if the shape can be moved.
   bool can_move = true;
 
-  Shape &Move(Position::Type dx, Position::Type dy) {
+  Tetromino &Move(Position::Type dx, Position::Type dy) {
     for (auto &pos : positions) {
       pos.x += dx;
       pos.y += dy;
@@ -34,37 +34,39 @@ struct Shape {
 
 struct Tetrominos {
   // https://www.wikiwand.com/en/Tetromino
-  // clang-format off
-  static constexpr std::array<Shape, 5> kTetrominos{
-      Shape{  .color{BLUE}, .positions{{{0, 0}, {1, 0}, {2, 0}, {3, 0}}}, .center{1.5, -0.5}}, // KStraight
-      Shape{.color{YELLOW}, .positions{{{0, 0}, {0, 1}, {1, 0}, {1, 1}}}, .center{0.5,  0.5}}, // kSquare
-      Shape{  .color{PINK}, .positions{{{0, 1}, {1, 1}, {2, 1}, {1, 0}}}, .center{1.0,  1.0}}, // kT
-      Shape{.color{ORANGE}, .positions{{{0, 0}, {0, 1}, {0, 2}, {1, 0}}}, .center{0.0,  0.0}}, // kL
-      Shape{ .color{GREEN}, .positions{{{0, 0}, {1, 0}, {1, 1}, {2, 1}}}, .center{1.0,  1.0}}, // kSkew
+  static constexpr std::array<Tetromino, 7> kTetrominos{
+      Tetromino{.color{SKYBLUE}, .positions{{{0, 0}, {1, 0}, {2, 0}, {3, 0}}}, .center{1.5, -0.5}}, // kStraight
+      Tetromino{   .color{BLUE}, .positions{{{0, 0}, {1, 0}, {1, 1}, {1, 2}}},  .center{1.0, 1.0}}, // kJ
+      Tetromino{ .color{ORANGE}, .positions{{{0, 0}, {0, 1}, {0, 2}, {1, 0}}},  .center{0.0, 0.1}}, // kL
+      Tetromino{ .color{YELLOW}, .positions{{{0, 0}, {0, 1}, {1, 0}, {1, 1}}},  .center{0.5, 0.5}}, // kSquare
+      Tetromino{  .color{GREEN}, .positions{{{0, 0}, {1, 0}, {1, 1}, {2, 1}}},  .center{1.0, 0.0}}, // kS
+      Tetromino{   .color{PINK}, .positions{{{0, 1}, {1, 1}, {2, 1}, {1, 0}}},  .center{1.0, 1.0}}, // kT
+      Tetromino{    .color{RED}, .positions{{{0, 1}, {1, 1}, {1, 0}, {2, 0}}},  .center{1.0, 1.0}}, // kZ
   };
-  // clang-format on
 
   static constexpr std::array<int, 5> kCenterIndex{1, 2, 3, 1, 2};
 
-  enum class Tetromino {
+  enum class Format {
     kStraight = 0,
-    kSquare,
-    kT,
+    kJ,
     kL,
-    kSkew,
+    kSquare,
+    kS,
+    kT,
+    kZ,
   };
 
-  static constexpr Shape Get(Tetromino tetromino) {
-    static_assert(kTetrominos.size() - 1 == static_cast<size_t>(Tetromino::kSkew));
+  static constexpr Tetromino Get(Format tetromino) {
+    static_assert(kTetrominos.size() - 1 == static_cast<size_t>(Format::kZ));
     return kTetrominos[static_cast<int>(tetromino)];
   }
 
-  static Shape GetRandom() {
+  static Tetromino GetRandom() {
     return kTetrominos[GetRandomValue(0, kTetrominos.size() - 1)];
   }
 };
 
-inline Position GetCenter(const Shape &shape) {
+inline Position GetCenter(const Tetromino &shape) {
   const auto &positions = shape.positions;
   const auto [xmin, xmax] = std::minmax_element(
       positions.begin(), positions.end(), [](const Position &pos0, const Position &pos1) { return pos0.x < pos1.x; });
@@ -76,7 +78,7 @@ inline Position GetCenter(const Shape &shape) {
   };
 }
 
-inline Shape Move(Shape shape, Position::Type dx, Position::Type dy) {
+inline Tetromino Move(Tetromino shape, Position::Type dx, Position::Type dy) {
   for (auto &pos : shape.positions) {
     pos += {dx, dy};
   }
@@ -84,7 +86,7 @@ inline Shape Move(Shape shape, Position::Type dx, Position::Type dy) {
   return shape;
 }
 
-inline void SetPosition(float x, float y, Shape &shape) {
+inline void SetPosition(float x, float y, Tetromino &shape) {
   for (auto &pos : shape.positions) {
     pos = pos + Position{x, y};
   }
@@ -105,19 +107,19 @@ inline Position RotateRight(Position pos, Position center = {0, 0}) {
   return Rotate(pos, -90, center);
 }
 
-inline Shape RotateShape(const Shape &shape, float angle) {
-  Shape out = shape;
+inline Tetromino RotateShape(const Tetromino &shape, float angle) {
+  Tetromino out = shape;
   for (auto &position : out.positions) {
     position = Rotate(position, angle, shape.center);
   }
   return out;
 }
 
-inline Shape RotateShapeLeft(const Shape &shape) {
+inline Tetromino RotateShapeLeft(const Tetromino &shape) {
   return RotateShape(shape, 90);
 }
 
-inline Shape RotateShapeRight(const Shape &shape) {
+inline Tetromino RotateShapeRight(const Tetromino &shape) {
   return RotateShape(shape, -90);
 }
 
