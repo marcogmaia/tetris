@@ -76,12 +76,12 @@ inline Position GetCenter(const Shape &shape) {
   };
 }
 
-inline void Move(Position::Type dx, Position::Type dy, Shape &shape) {
+inline Shape Move(Shape shape, Position::Type dx, Position::Type dy) {
   for (auto &pos : shape.positions) {
-    pos.x += dx;
-    pos.y += dy;
+    pos += {dx, dy};
   }
   shape.center = shape.center + Position{dx, dy};
+  return shape;
 }
 
 inline void SetPosition(float x, float y, Shape &shape) {

@@ -45,7 +45,26 @@ class Tetris {
     NextShape();
   }
 
+  void Move(int x, int y) {
+    if (auto next_pos = ::maia::Move(current_shape_, x, y); CanMove(next_pos)) {
+      current_shape_ = next_pos;
+    }
+  }
+
  private:
+  bool CanMove(const Shape& shape) {
+    auto can_move = [this](Position pos) {
+      const auto x = std::lroundf(pos.x);
+      const auto y = std::lroundf(pos.y);
+      const auto block = grid_.at(x, y);
+      if (!block) {
+        return true;
+      }
+      return !block->get().filled;
+    };
+    return std::all_of(shape.positions.begin(), shape.positions.end(), can_move);
+  }
+
   static Shape GetShape() {
     auto shape = maia::Tetrominos::GetRandom();
     maia::SetPosition(2, 20, shape);

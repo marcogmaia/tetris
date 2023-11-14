@@ -17,6 +17,11 @@ struct Vector2 {
     return {x + rhs.x, y + rhs.y};
   };
 
+  constexpr Vector2<T>& operator+=(const Vector2<T> rhs) {
+    *this = *this + rhs;
+    return *this;
+  };
+
   constexpr Vector2<T> operator-() const {
     return {-x, -y};
   };
