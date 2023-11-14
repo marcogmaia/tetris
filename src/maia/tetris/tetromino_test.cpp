@@ -23,18 +23,18 @@ TEST(Tetromino, Rotate) {
 }
 
 TEST(Tetromino, RotateStraight) {
-  auto shape = Tetrominos::Get(Tetrominos::Format::kStraight);
-  auto rotated_shape = RotateShapeLeft(shape);
+  auto tetromino = Tetrominos::Get(Tetrominos::Format::kStraight);
+  auto rotated_tetromino = RotatetetrominoLeft(tetromino);
   auto expected_positions = std::vector<Position>{
       {1, -2},
       {1, -1},
       {1,  0},
       {1,  1}
   };
-  ASSERT_EQ(expected_positions.size(), rotated_shape.positions.size());
+  ASSERT_EQ(expected_positions.size(), rotated_tetromino.positions.size());
   for (int i = 0; i < expected_positions.size(); ++i) {
-    EXPECT_NEAR(expected_positions[i].x, rotated_shape.positions[i].x, 1e-6);
-    EXPECT_NEAR(expected_positions[i].y, rotated_shape.positions[i].y, 1e-6);
+    EXPECT_NEAR(expected_positions[i].x, rotated_tetromino.positions[i].x, 1e-6);
+    EXPECT_NEAR(expected_positions[i].y, rotated_tetromino.positions[i].y, 1e-6);
   }
 }
 

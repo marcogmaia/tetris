@@ -43,19 +43,9 @@ void FillRandomPosition(Color color) {
   FillPosition(x, y, color);
 }
 
-void DrawShape(const Tetromino &shape) {
-  for (const auto &pos : shape.positions) {
-    DrawRectangle(pos.x * kSquaseSide, pos.y * kSquaseSide, kSquaseSide, kSquaseSide, shape.color);
-  }
-}
-
-void DrawAllShapes() {
-  Position pos{};
-  for (const auto &tetromino : Tetrominos::kTetrominos) {
-    pos = pos + Position{5, 3};
-    Tetromino shape = tetromino;
-    SetPosition(pos.x, pos.y, shape);
-    DrawShape(shape);
+void DrawTetromino(const Tetromino &tetromino) {
+  for (const auto &pos : tetromino.positions) {
+    DrawRectangle(pos.x * kSquaseSide, pos.y * kSquaseSide, kSquaseSide, kSquaseSide, tetromino.color);
   }
 }
 
@@ -139,7 +129,6 @@ int main() {
 
   RenderTexture render_tex = LoadRenderTexture(kWindowWidth, kWindowHeight);
 
-  // auto shape = maia::GetShape();
   maia::Clock clock{};
   maia::Tetris tetris{};
 
@@ -150,7 +139,7 @@ int main() {
     BeginTextureMode(render_tex);
     {
       ClearBackground(BLANK);
-      maia::DrawShape(tetris.CurrentShape());
+      maia::DrawTetromino(tetris.CurrentTetromino());
       maia::DrawGrid();
       maia::DrawGrid(tetris.grid());
     }
