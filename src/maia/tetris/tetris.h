@@ -23,7 +23,7 @@ class Tetris {
     current_tetromino_.Move(0, -1);
     if (grid_.CheckCollision(current_tetromino_)) {
       grid_.FillWith(prev);
-      Nexttetromino();
+      NextTetromino();
       RemoveFilledRows();
     }
   }
@@ -42,7 +42,7 @@ class Tetris {
 
   void Reset() {
     grid_ = Grid{};
-    Nexttetromino();
+    NextTetromino();
   }
 
   void Move(int x, int y) {
@@ -101,7 +101,7 @@ class Tetris {
     grid_ = std::move(new_grid);
   }
 
-  void Nexttetromino() {
+  void NextTetromino() {
     current_tetromino_ = next_tetromino_;
     next_tetromino_ = GetTetromino();
   }
