@@ -101,7 +101,7 @@ class Grid {
   }
 
   static constexpr int kWidth = 10;
-  static constexpr int kHeight = 20;
+  static constexpr int kHeight = 22;
   //  This is stored in row major order.
   std::vector<Block> grid_ = std::vector<Block>(kWidth * kHeight, Block{});
   std::vector<std::span<Block>> rows_ = InitRows(grid_);
@@ -118,6 +118,14 @@ inline void DrawGrid(const Grid &grid) {
       }
     }
   }
+}
+
+inline Tetromino MoveToInitialPosition(const Tetromino &tetromino) {
+  auto [min_elem, max_elem] = std::minmax_element(
+      tetromino.positions.begin(), tetromino.positions.end(), [](Position p1, Position p2) { return p1.x < p2.x; });
+  auto width = max_elem->x - min_elem->x;
+  auto dx = width == 1 ? 4 : 3;
+  return Move(tetromino, dx, Grid::GridHeight() - 2 - min_elem->y);
 }
 
 }  // namespace maia

@@ -36,11 +36,11 @@ struct Tetrominos {
   // https://www.wikiwand.com/en/Tetromino
   static constexpr std::array<Tetromino, 7> kTetrominos{
       Tetromino{.color{SKYBLUE}, .positions{{{0, 0}, {1, 0}, {2, 0}, {3, 0}}}, .center{1.5, -0.5}}, // kStraight
-      Tetromino{   .color{BLUE}, .positions{{{0, 0}, {1, 0}, {1, 1}, {1, 2}}},  .center{1.0, 1.0}}, // kJ
-      Tetromino{ .color{ORANGE}, .positions{{{0, 0}, {0, 1}, {0, 2}, {1, 0}}},  .center{0.0, 1.0}}, // kL
+      Tetromino{   .color{BLUE}, .positions{{{0, 0}, {1, 0}, {2, 0}, {2, 1}}},  .center{1.0, 1.0}}, // kJ
+      Tetromino{ .color{ORANGE}, .positions{{{0, 0}, {1, 0}, {2, 0}, {0, 1}}},  .center{1.0, 0.0}}, // kL
       Tetromino{ .color{YELLOW}, .positions{{{0, 0}, {0, 1}, {1, 0}, {1, 1}}},  .center{0.5, 0.5}}, // kSquare
       Tetromino{  .color{GREEN}, .positions{{{0, 0}, {1, 0}, {1, 1}, {2, 1}}},  .center{1.0, 1.0}}, // kS
-      Tetromino{   .color{PINK}, .positions{{{0, 1}, {1, 1}, {2, 1}, {1, 0}}},  .center{1.0, 1.0}}, // kT
+      Tetromino{   .color{PINK}, .positions{{{0, 0}, {1, 0}, {2, 0}, {1, 1}}},  .center{1.0, 0.0}}, // kT
       Tetromino{    .color{RED}, .positions{{{0, 1}, {1, 1}, {1, 0}, {2, 0}}},  .center{1.0, 1.0}}, // kZ
   };
 
