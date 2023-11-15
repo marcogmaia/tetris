@@ -23,11 +23,11 @@ void DrawGrid() {
   constexpr auto kY = kSquaseSide * kHeight;
   for (int h = 0; h <= kHeight; ++h) {
     auto y = h * kSquaseSide;
-    DrawLine(0, y, kX, y, WHITE);
+    DrawLine(1, y, kX, y, WHITE);
   }
   for (int v = 0; v <= kWidth; ++v) {
     auto x = v * kSquaseSide;
-    DrawLine(x, 0, x, kY, WHITE);
+    DrawLine(x + 1, 0, x, kY, WHITE);
   }
 }
 
@@ -70,13 +70,9 @@ class Clock {
   std::chrono::steady_clock clock_;
 };
 
-}  // namespace maia
-
-namespace {
-
-void Update(maia::Clock &clock, maia::Tetris &tetris) {
+void Update(Clock &clock, Tetris &tetris) {
   if (IsKeyReleased(KEY_SPACE)) {
-    clock.SetSpeed(maia::Clock::GetClockRate());
+    clock.SetSpeed(Clock::GetClockRate());
   }
   if (IsKeyPressed(KEY_SPACE)) {
     clock.SetSpeed(5);
@@ -94,11 +90,11 @@ void Update(maia::Clock &clock, maia::Tetris &tetris) {
   }
 }
 
-}  // namespace
+}  // namespace maia
 
 int main() {
-  constexpr int kWindowWidth = 1024;
-  constexpr int kWindowHeight = 768;
+  constexpr int kWindowWidth = 32 * maia::Grid::GridWidth() + 1;
+  constexpr int kWindowHeight = 32 * maia::Grid::GridHeight() + 1;
 
   SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE);
   InitWindow(kWindowWidth, kWindowHeight, "Tetris");
@@ -109,7 +105,7 @@ int main() {
   maia::Tetris tetris{};
 
   while (!WindowShouldClose()) {
-    Update(clock, tetris);
+    maia::Update(clock, tetris);
 
     // Draw tetris in another texture.
     BeginTextureMode(render_tex);

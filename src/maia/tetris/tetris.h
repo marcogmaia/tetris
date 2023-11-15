@@ -76,8 +76,7 @@ class Tetris {
 
   static Tetromino GetTetromino() {
     auto tetromino = maia::Tetrominos::GetRandom();
-    maia::SetPosition(2, 20, tetromino);
-    return tetromino;
+    return MoveToInitialPosition(tetromino);
   }
 
   void RemoveFilledRows() {
